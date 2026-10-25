@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Progress Log</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#EEF1F5">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap">
+<style>
+:root{--bg:#EEF1F5;--surface:#fff;--ink:#18202E;--muted:#667085;--line:#D9DEE7;--w:#E8562A;--s:#14917F;--c:#3B5BDB;--bad:#C0392B;--g:#B5459B;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#121722;--surface:#1B2230;--ink:#ECEFF5;--muted:#98A2B3;--line:#2B3548;--w:#FF7F55;--s:#3CC4AF;--c:#7C93FF;--bad:#FF8A7A;--g:#F07BB8}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#121722;--surface:#1B2230;--ink:#ECEFF5;--muted:#98A2B3;--line:#2B3548;--w:#FF7F55;--s:#3CC4AF;--c:#7C93FF;--bad:#FF8A7A;--g:#F07BB8}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.4}
+.app{max-width:480px;margin:0 auto;padding:16px 16px 40px}
+h1{font-size:26px;font-weight:800;margin:4px 0 2px;letter-spacing:-.02em}
+h2{font-size:15px;font-weight:600;margin:0 0 10px}
+.sub{color:var(--muted);font-size:14px;margin:0 0 14px}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;background:var(--line);padding:4px;border-radius:12px;margin-bottom:14px}
+.tabs button{border:0;background:transparent;color:var(--muted);font:inherit;font-weight:600;padding:9px;border-radius:9px;cursor:pointer}
+.tabs button.on{background:var(--surface);color:var(--ink)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--c);outline-offset:2px}
+input,select{background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:9px 10px;width:100%;min-width:0}
+.row{display:flex;gap:8px;margin-bottom:8px}
+.btn{border:0;background:var(--ink);color:var(--bg);font-weight:600;border-radius:9px;padding:9px 14px;cursor:pointer;white-space:nowrap}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn[disabled]{opacity:.35;cursor:default}
+input[type=checkbox]{width:22px;height:22px;padding:0;flex:none;accent-color:var(--g)}
+.meter{margin-bottom:12px}
+.meter:last-child{margin-bottom:0}
+.meter .top{display:flex;justify-content:space-between;font-size:14px;margin-bottom:5px}
+.meter .top b{font-weight:600}
+.track{height:10px;background:var(--bg);border-radius:6px;overflow:hidden}
+.track i{display:block;height:100%;border-radius:6px}
+.over i{background:var(--bad)!important}
+.meal{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-top:1px solid var(--line);font-size:15px}
+.meal:first-of-type{border-top:0}
+.meal small{color:var(--muted);display:block}
+.x{background:none;border:0;color:var(--muted);cursor:pointer;font-size:18px;padding:4px 8px}
+.nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.nav b{font-size:17px}
+.stat{display:grid;grid-template-columns:90px 1fr auto;gap:10px;align-items:center;padding:6px 0;font-size:14px}
+.dots{display:flex;gap:3px;flex-wrap:wrap}
+.dots i{width:9px;height:9px;border-radius:50%;background:var(--line)}
+.dots i.on{background:var(--col)}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.cal .h{font-size:11px;color:var(--muted);text-align:center;padding-bottom:2px}
+.cell{aspect-ratio:1/1.05;border-radius:8px;background:var(--bg);padding:4px;display:flex;flex-direction:column;justify-content:space-between;font-size:11px}
+.cell.future{opacity:.4}
+.cell.today{outline:2px solid var(--ink)}
+.bars{display:grid;gap:2px}
+.bars i{height:4px;border-radius:2px;background:var(--line)}
+.bars i.w.on{background:var(--w)}.bars i.s.on{background:var(--s)}.bars i.c.on{background:var(--c)}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--muted);margin-top:10px;flex-wrap:wrap}
+.legend span::before{content:"";display:inline-block;width:10px;height:4px;border-radius:2px;margin-right:5px;vertical-align:middle;background:var(--col)}
+svg text{fill:var(--muted);font-size:10px;font-family:inherit}
+.note{font-size:12px;color:var(--muted);text-align:center;margin-top:16px}
+@media (prefers-reduced-motion:no-preference){.track i{transition:width .3s}}
+</style>
+</head>
+<body>
+<div class="app">
+  <h1>Progress log</h1>
+  <p class="sub" id="sub"></p>
+  <div class="tabs" role="tablist">
+    <button data-act="view" data-v="log">Log</button>
+    <button data-act="view" data-v="today">Today</button>
+    <button data-act="view" data-v="week">Week</button>
+    <button data-act="view" data-v="month">Month</button>
+  </div>
+  <div id="main"></div>
+  <p class="note">Your entries are saved on this device only.</p>
+</div>
+<script>
+const MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
+const DAYS=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+const FOODS=[["Idli (3)",210],["Dosa",170],["Chapati (2)",200],["Rice (1 cup)",205],["Sambar",90],["Chicken curry",280],["Egg omelette",140],["Banana",105],["Curd (1 cup)",120],["Poha",250],["Upma",230],["Salad",80],["Dal",150],["Biryani (1 plate)",450]];
+const TYPES=["Gym","Cardio","Yoga","Cycling","Swimming","Sports","Other"];
+const MEALS=["Breakfast","Lunch","Snack","Dinner"];
+const G={steps:8000,cal:1800};
+const P={set:false,sex:"male",age:30,height:170,weight:70,act:1.2,goal:"loss"};
+const calc=()=>{const bmr=Math.round(10*P.weight+6.25*P.height-5*P.age+(P.sex==="male"?5:-161)),maint=Math.round(bmr*P.act),adj=P.goal==="bulk"?500:-300;return{bmr,maint,adj,target:maint+adj}};
+const calLbl=()=>P.goal==="bulk"?"Hit target":"Under limit";
+let view="today",offset=0,msg="",confirmClear=false;
+
+const strip=d=>new Date(d.getFullYear(),d.getMonth(),d.getDate());
+let TODAY=strip(new Date());
+const add=(d,n)=>new Date(d.getFullYear(),d.getMonth(),d.getDate()+n);
+const key=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const dow=d=>(d.getDay()+6)%7;
+
+const DB={};
+const LS_KEY="progress-log-v1";
+function load(){try{const o=JSON.parse(localStorage.getItem(LS_KEY)||"null");if(o){Object.assign(DB,o.DB||{});Object.assign(G,o.G||{});Object.assign(P,o.P||{})}}catch(e){}}
+function save(){try{localStorage.setItem(LS_KEY,JSON.stringify({DB,G,P}))}catch(e){}}
+load();
+const day=k=>DB[k]||(DB[k]={workouts:[],steps:0,meals:[]});
+const total=d=>d.meals.reduce((a,m)=>a+m.cal,0);
+function flags(d){const x=DB[key(d)];if(!x)return{g:false,w:false,s:false,c:false,cal:0,steps:0,logged:false};const c=total(x);return{g:!!x.sugar,w:x.workouts.length>0,s:x.steps>=G.steps,c:c>0&&(P.goal==="bulk"?c>=G.cal:c<=G.cal),cal:c,steps:x.steps,logged:c>0}}
+function summarize(dates){
+  const past=dates.filter(d=>d<=TODAY),f=past.map(flags);
+  const logged=f.filter(x=>x.logged);
+  return{n:past.length,g:f.filter(x=>x.g).length,w:f.filter(x=>x.w).length,s:f.filter(x=>x.s).length,c:f.filter(x=>x.c).length,
+    avg:logged.length?Math.round(logged.reduce((a,x)=>a+x.cal,0)/logged.length):0,
+    avgSteps:past.length?Math.round(f.reduce((a,x)=>a+x.steps,0)/past.length):0};
+}
+function knownFoods(){const m=new Map(FOODS);Object.values(DB).forEach(d=>d.meals.forEach(x=>m.set(x.name,x.cal)));return m}
+
+function bar(vals,labels,goal,col){
+  const W=320,H=120,pad=18,bw=W/vals.length,max=Math.max(goal*1.25,...vals,1);
+  let s=`<svg viewBox="0 0 ${W} ${H+16}" width="100%" role="img" aria-label="Bar chart">`;
+  vals.forEach((v,i)=>{const h=v/max*(H-pad),x=i*bw+bw*.18;
+    s+=`<rect x="${x}" y="${H-h}" width="${bw*.64}" height="${h}" rx="3" fill="var(${col})" opacity="${v?1:.15}"/><text x="${i*bw+bw/2}" y="${H+12}" text-anchor="middle">${labels[i]}</text>`});
+  const gy=H-goal/max*(H-pad);
+  s+=`<line x1="0" x2="${W}" y1="${gy}" y2="${gy}" stroke="var(--ink)" stroke-dasharray="4 4" opacity=".5"/><text x="${W}" y="${gy-3}" text-anchor="end">goal ${goal}</text></svg>`;
+  return s;
+}
+const meter=(label,val,goal,col,txt,over)=>`<div class="meter ${over?"over":""}"><div class="top"><span>${label}</span><b>${txt}</b></div><div class="track"><i style="width:${Math.min(100,val/goal*100)}%;background:var(${col})"></i></div></div>`;
+const stat=(label,n,of,col)=>{let d="";for(let i=0;i<of;i++)d+=`<i class="${i<n?"on":""}"></i>`;return`<div class="stat"><span>${label}</span><div class="dots" style="--col:var(${col})">${d}</div><b>${n}/${of}</b></div>`};
+
+function renderToday(){
+  const d=day(key(TODAY)),c=total(d),n=d.workouts.length,mins=d.workouts.reduce((a,w)=>a+w.min,0);
+  return`
+  <div class="card"><h2>Today so far</h2>
+    ${meter("Calories eaten",c,G.cal,"--c",`${c} / ${G.cal}`,c>G.cal&&P.goal!=="bulk")}
+    ${meter("Steps",d.steps,G.steps,"--s",`${d.steps.toLocaleString()} / ${G.steps.toLocaleString()}`)}
+    ${meter("Workout",n?1:0,1,"--w",n?`${n} workout${n>1?"s":""}, ${mins} min`:"Not yet")}
+    ${meter("Sugar cut",d.sugar?1:0,1,"--g",d.sugar?"Successful":"Not marked")}
+  </div>
+  <div class="card"><h2>Workouts</h2>${n?d.workouts.map(w=>`<div class="meal"><span>${esc(w.type)}</span><span>${w.min} min</span></div>`).join(""):`<p class="sub" style="margin:0">No workouts logged yet.</p>`}</div>
+  <div class="card"><h2>Meals</h2>${d.meals.length?d.meals.map(m=>`<div class="meal"><span>${esc(m.name)}<small>${m.type}</small></span><span>${m.cal} kcal</span></div>`).join(""):`<p class="sub" style="margin:0">No meals logged yet.</p>`}</div>
+  <button class="btn" style="width:100%" data-act="view" data-v="log">Add or edit today’s entries</button>`;
+}
+
+function renderLog(){
+  const d=day(key(TODAY)),foods=[...knownFoods().keys()];
+  return`${msg?`<p class="sub" role="status" style="color:var(--s);font-weight:600">${msg}</p>`:""}
+  <div class="card"><div class="row" style="align-items:center;justify-content:space-between;margin:0"><div><h2 style="margin:0">Daily calorie target</h2><span class="sub" style="margin:0">${P.set?`${G.cal} kcal, ${P.goal==="bulk"?"bulking":"weight loss"}`:"Not set yet. Use BMR to calculate it."}</span></div><button class="btn" data-act="view" data-v="settings">Settings</button></div></div>
+  <div class="card"><h2>Add a workout</h2>
+    <form data-form="workout"><div class="row">
+      <select name="type" aria-label="Workout type">${TYPES.map(t=>`<option>${t}</option>`).join("")}</select>
+      <input name="min" type="number" min="1" placeholder="Minutes" aria-label="Minutes" required style="max-width:110px">
+    </div>
+    <button class="btn" type="submit">Add workout</button></form>
+    <div style="margin-top:12px">${d.workouts.length?d.workouts.map(w=>`<div class="meal"><span>${esc(w.type)}</span><span>${w.min} min<button class="x" data-act="delw" data-id="${w.id}" aria-label="Delete ${esc(w.type)}">×</button></span></div>`).join(""):`<p class="sub" style="margin:0">No workouts yet today. You can add more than one.</p>`}</div>
+  </div>
+  <div class="card"><h2>Steps</h2>
+    <form data-form="steps" class="row"><input name="steps" type="number" min="0" placeholder="Steps walked today" aria-label="Steps" value="${d.steps||""}"><button class="btn" type="submit">Save steps</button></form>
+  </div>
+  <div class="card"><label style="display:flex;gap:10px;align-items:center;cursor:pointer;font-weight:600"><input type="checkbox" data-sugar ${d.sugar?"checked":""}>Sugar cut successful today</label></div>
+  <div class="card"><h2>Add a meal</h2>
+    <form data-form="meal">
+      <div class="row"><select name="type" aria-label="Meal type">${MEALS.map(t=>`<option>${t}</option>`).join("")}</select></div>
+      <div class="row"><input name="name" list="foods" placeholder="Food, e.g. Dosa" aria-label="Food name" required autocomplete="off">
+      <input name="cal" type="number" min="1" placeholder="kcal" aria-label="Calories" required style="max-width:90px"></div>
+      <datalist id="foods">${foods.map(f=>`<option value="${esc(f)}">`).join("")}</datalist>
+      <button class="btn" type="submit">Add meal</button>
+    </form>
+    <div style="margin-top:12px">${d.meals.length?d.meals.map(m=>`<div class="meal"><span>${esc(m.name)}<small>${m.type}</small></span><span>${m.cal} kcal<button class="x" data-act="del" data-id="${m.id}" aria-label="Delete ${esc(m.name)}">×</button></span></div>`).join(""):`<p class="sub" style="margin:0">No meals yet. Add your first one above.</p>`}</div>
+  </div>
+  <div class="card"><h2>Goals</h2><div class="row">
+    <label style="flex:1;font-size:13px;color:var(--muted)">Daily steps<input data-goal="steps" type="number" min="1" value="${G.steps}"></label>
+    ${P.set?`<div style="flex:1;font-size:13px;color:var(--muted)">Calorie target<div style="padding:9px 0;color:var(--ink);font-size:15px">${G.cal} kcal (from BMR)</div></div>`:`<label style="flex:1;font-size:13px;color:var(--muted)">Calorie limit<input data-goal="cal" type="number" min="1" value="${G.cal}"></label>`}</div></div>`;
+}
+
+function renderSettings(){
+  return`<button class="btn ghost" data-act="view" data-v="log" style="margin-bottom:12px">\u2039 Back to Log</button>
+  ${msg?`<p class="sub" role="status" style="color:var(--s);font-weight:600">${msg}</p>`:""}
+  <div class="card"><div class="row" style="align-items:center;justify-content:space-between;margin:0"><div><h2 style="margin:0">Calorie target</h2><span class="sub" style="margin:0">${P.set?`${G.cal} kcal, ${P.goal==="bulk"?"bulking":"weight loss"}`:"Not set yet"}</span></div><button class="btn" data-act="view" data-v="bmr">BMR</button></div></div>
+  ${confirmClear?`<div class="card" role="alertdialog" aria-label="Confirm clear history"><h2>Clear all history?</h2><p class="sub" style="margin-top:0">This deletes every logged workout, step count, meal and sugar check. Your goals and BMR settings stay. This can\u2019t be undone.</p><div class="row"><button class="btn" style="background:var(--bad);color:#fff" data-act="clearyes">Yes, clear everything</button><button class="btn ghost" data-act="clearno">Cancel</button></div></div>`:`<button class="btn ghost" style="width:100%;color:var(--bad)" data-act="clear">Clear history</button>`}`;
+}
+
+function renderBmr(){
+  const r=calc(),L='style="flex:1;font-size:13px;color:var(--muted)"',sel=(a,b)=>a===b?"selected":"";
+  const ACT=[[1.2,"Sedentary (little or no exercise)"],[1.375,"Light (1\u20133 days a week)"],[1.55,"Moderate (3\u20135 days a week)"],[1.725,"Very active (6\u20137 days a week)"]];
+  return`<button class="btn ghost" data-act="view" data-v="settings" style="margin-bottom:12px">\u2039 Back to Settings</button>
+  ${msg?`<p class="sub" role="status" style="color:var(--s);font-weight:600">${msg}</p>`:""}
+  <div class="card"><h2>Your details</h2>
+    <form data-form="bmr">
+      <div class="row"><label ${L}>Sex<select name="sex"><option value="male" ${sel(P.sex,"male")}>Male</option><option value="female" ${sel(P.sex,"female")}>Female</option></select></label>
+      <label ${L}>Age<input name="age" type="number" min="10" max="100" value="${P.age}" required></label></div>
+      <div class="row"><label ${L}>Height (cm)<input name="height" type="number" min="100" max="250" value="${P.height}" required></label>
+      <label ${L}>Weight (kg)<input name="weight" type="number" min="30" max="300" step="0.1" value="${P.weight}" required></label></div>
+      <div class="row"><label ${L}>Activity level<select name="act">${ACT.map(a=>`<option value="${a[0]}" ${sel(P.act,a[0])}>${a[1]}</option>`).join("")}</select></label></div>
+      <div class="row"><label ${L}>Goal<select name="goal"><option value="loss" ${sel(P.goal,"loss")}>Weight loss (\u2212300 kcal)</option><option value="bulk" ${sel(P.goal,"bulk")}>Bulking (+500 kcal)</option></select></label></div>
+      <button class="btn" type="submit">Calculate and apply</button>
+    </form>
+  </div>
+  <div class="card"><h2>Your daily calories</h2>${P.set?`
+    <div class="meal"><span>BMR<small>Calories your body burns at rest</small></span><b>${r.bmr} kcal</b></div>
+    <div class="meal"><span>Maintenance<small>BMR \u00d7 activity level</small></span><b>${r.maint} kcal</b></div>
+    <div class="meal"><span>${P.goal==="bulk"?"Bulking":"Weight loss"} adjustment</span><b>${r.adj>0?"+":"\u2212"}${Math.abs(r.adj)} kcal</b></div>
+    <div class="meal"><span><b>Daily target</b><small>Used on Today, Week and Month</small></span><b>${r.target} kcal</b></div>
+    ${r.target<r.bmr?`<p class="sub" style="margin:10px 0 0;color:var(--bad)">This target is below your BMR. Consider a higher activity level or a smaller deficit.</p>`:""}`:`<p class="sub" style="margin:0">Fill in your details and press Calculate and apply.</p>`}
+    <p class="sub" style="margin:10px 0 0;font-size:12px">Uses the Mifflin-St Jeor formula. Workouts and steps you log are not added on top, so pick the activity level that matches your usual week.</p>
+  </div>`;
+}
+
+function renderWeek(){
+  const end=add(TODAY,offset*7),dates=[];for(let i=6;i>=0;i--)dates.push(add(end,-i));
+  const S=summarize(dates),f=dates.map(flags);
+  const lab=`${dates[0].getDate()} ${MONTHS[dates[0].getMonth()].slice(0,3)} to ${dates[6].getDate()} ${MONTHS[dates[6].getMonth()].slice(0,3)}`;
+  return`<div class="nav"><button class="btn ghost" data-act="prev" aria-label="Previous week">‹</button><b>${lab}</b><button class="btn ghost" data-act="next" ${offset>=0?"disabled":""} aria-label="Next week">›</button></div>
+  <div class="card"><h2>Consistency</h2>${stat("Workout",S.w,S.n,"--w")}${stat("Steps goal",S.s,S.n,"--s")}${stat(calLbl(),S.c,S.n,"--c")}${stat("Sugar cut",S.g,S.n,"--g")}</div>
+  <div class="card"><h2>Calories eaten</h2>${bar(f.map(x=>x.cal),dates.map(d=>DAYS[dow(d)][0]),G.cal,"--c")}<p class="sub" style="margin:8px 0 0">Average on logged days: <b>${S.avg} kcal</b></p></div>
+  <div class="card"><h2>Steps walked</h2>${bar(f.map(x=>x.steps),dates.map(d=>DAYS[dow(d)][0]),G.steps,"--s")}<p class="sub" style="margin:8px 0 0">Average per day: <b>${S.avgSteps.toLocaleString()}</b></p></div>`;
+}
+
+function renderMonth(){
+  const base=new Date(TODAY.getFullYear(),TODAY.getMonth()+offset,1),last=new Date(base.getFullYear(),base.getMonth()+1,0);
+  const dates=[];for(let i=1;i<=last.getDate();i++)dates.push(new Date(base.getFullYear(),base.getMonth(),i));
+  const S=summarize(dates);
+  let cells=DAYS.map(d=>`<div class="h">${d[0]}</div>`).join("");
+  for(let i=0;i<dow(base);i++)cells+="<div></div>";
+  dates.forEach(d=>{const f=flags(d),fut=d>TODAY;
+    cells+=`<div class="cell ${fut?"future":""} ${key(d)===key(TODAY)?"today":""}"><span>${d.getDate()}</span><div class="bars"><i class="w ${f.w?"on":""}"></i><i class="s ${f.s?"on":""}"></i><i class="c ${f.c?"on":""}"></i></div></div>`});
+  return`<div class="nav"><button class="btn ghost" data-act="prev" aria-label="Previous month">‹</button><b>${MONTHS[base.getMonth()]} ${base.getFullYear()}</b><button class="btn ghost" data-act="next" ${offset>=0?"disabled":""} aria-label="Next month">›</button></div>
+  <div class="card"><div class="cal">${cells}</div>
+    <div class="legend"><span style="--col:var(--w)">Workout done</span><span style="--col:var(--s)">Steps goal met</span><span style="--col:var(--c)">${P.goal==="bulk"?"Calorie target reached":"Under calorie limit"}</span></div></div>
+  <div class="card"><h2>Days consistent</h2>${stat("Workout",S.w,S.n,"--w")}${stat("Steps goal",S.s,S.n,"--s")}${stat(calLbl(),S.c,S.n,"--c")}${stat("Sugar cut",S.g,S.n,"--g")}
+  <p class="sub" style="margin:10px 0 0">Average calories on logged days: <b>${S.avg} kcal</b></p></div>`;
+}
+
+function render(){
+  document.querySelectorAll(".tabs button").forEach(b=>b.classList.toggle("on",b.dataset.v===(view==="bmr"||view==="settings"?"log":view)));
+  $sub.textContent=TODAY.toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long"});
+  $main.innerHTML=view==="today"?renderToday():view==="log"?renderLog():view==="settings"?renderSettings():view==="bmr"?renderBmr():view==="week"?renderWeek():renderMonth();
+  save();
+}
+const $sub=document.getElementById("sub"),$main=document.getElementById("main");
+
+document.addEventListener("click",e=>{
+  const t=e.target.closest("[data-act]");if(!t)return;const a=t.dataset.act,d=day(key(TODAY));
+  if(a==="view"){view=t.dataset.v;offset=0;msg="";confirmClear=false}
+  else if(a==="prev")offset--;
+  else if(a==="next"&&offset<0)offset++;
+  else if(a==="delw"){d.workouts=d.workouts.filter(w=>String(w.id)!==t.dataset.id)}
+  else if(a==="del"){d.meals=d.meals.filter(m=>String(m.id)!==t.dataset.id)}
+  else if(a==="clear"){confirmClear=true}
+  else if(a==="clearno"){confirmClear=false}
+  else if(a==="clearyes"){Object.keys(DB).forEach(k=>delete DB[k]);confirmClear=false;msg="History cleared"}
+  render();
+});
+document.addEventListener("submit",e=>{
+  e.preventDefault();const f=e.target,k=f.dataset.form,d=day(key(TODAY)),v=Object.fromEntries(new FormData(f));
+  if(k==="workout"){d.workouts.push({id:Math.random(),type:v.type,min:Math.max(1,+v.min||0)});msg="Workout added"}
+  if(k==="steps"){d.steps=Math.max(0,+v.steps||0);msg="Steps saved"}
+  if(k==="meal"){d.meals.push({id:Math.random(),type:v.type,name:v.name.trim(),cal:+v.cal});msg="Meal added"}
+  if(k==="bmr"){Object.assign(P,{set:true,sex:v.sex,age:+v.age,height:+v.height,weight:+v.weight,act:+v.act,goal:v.goal});G.cal=calc().target;msg="Calorie target updated to "+G.cal+" kcal"}
+  render();
+});
+document.addEventListener("input",e=>{
+  if(e.target.name==="name"){const c=knownFoods().get(e.target.value);if(c)e.target.form.elements.cal.value=c}
+});
+document.addEventListener("change",e=>{
+  if(e.target.dataset.sugar!==undefined){day(key(TODAY)).sugar=e.target.checked;msg=e.target.checked?"Sugar cut marked for today":"Sugar cut unmarked";render();return}
+  const g=e.target.dataset.goal;if(g&&+e.target.value>0){G[g]=+e.target.value;render()}
+});
+render();
+document.addEventListener("visibilitychange",()=>{if(!document.hidden){const n=strip(new Date());if(+n!==+TODAY){TODAY=n;offset=0;render()}}});
+if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+</script>
+</body>
+</html>
